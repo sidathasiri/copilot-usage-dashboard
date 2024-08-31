@@ -28,3 +28,6 @@ export const countMetricPerDay = (data) => {
       count: totalCountByDate[key],
     }));
 };
+
+export const getTotalAcceptedSuggestions = (data = []) =>
+  data.reduce((sum, current) => sum + current.count, 0);

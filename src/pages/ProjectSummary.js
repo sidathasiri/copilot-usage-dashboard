@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button, Card, Typography, Row, Col } from "antd";
+import { Button, Card, Typography, Row, Col, Spin } from "antd";
 import {
   UserOutlined,
   CheckCircleOutlined,
@@ -9,15 +9,9 @@ import {
 import UsageChart from "../components/UsageChart";
 import UserList from "../components/UserList";
 import { getUsersMetrics } from "../services/user-service";
-import { countMetricPerDay } from "../utils/utils";
+import { countMetricPerDay, getTotalAcceptedSuggestions } from "../utils/utils";
 
 const { Title, Text } = Typography;
-
-const summaryData = [
-  { title: "Total Suggestions", value: 1240 },
-  { title: "Accepted Suggestions", value: 850 },
-  { title: "Active Users", value: 25 },
-];
 
 const ProjectSummary = ({
   projects,
@@ -32,7 +26,7 @@ const ProjectSummary = ({
   );
   const project = projects.find((p) => p.id === projectId);
   const [metrics, setMetrics] = useState({});
-  const [metricsByDate, setMetricsByDate] = useState({});
+  const [metricsByDate, setMetricsByDate] = useState([]);
   console.log("metricsByDate:", metricsByDate);
 
   useEffect(() => {
@@ -55,8 +49,10 @@ const ProjectSummary = ({
   };
 
   // Sample data for cards (replace with actual data from summaryData)
-  const totalSuggestions = summaryData.totalSuggestions || 'NA';
-  const acceptedSuggestions = summaryData.acceptedSuggestions || 0;
+  const totalSuggestions = "NA";
+  const acceptedSuggestions = getTotalAcceptedSuggestions(metricsByDate) || (
+    <Spin />
+  );
   const activeUsers = users.length || 0;
 
   return (

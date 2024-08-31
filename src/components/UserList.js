@@ -14,9 +14,9 @@ const UserList = ({ users, setSelectedUser }) => {
       width: "33%",
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: "Accepted Count",
+      dataIndex: "acceptedCount",
+      key: "acceptedCount",
       width: "33%",
     },
     {

@@ -9,7 +9,11 @@ import {
 import UsageChart from "../components/UsageChart";
 import UserList from "../components/UserList";
 import { getUsersMetrics } from "../services/user-service";
-import { countMetricPerDay, getTotalAcceptedSuggestions } from "../utils/utils";
+import {
+  countMetricPerDay,
+  getTotalAcceptedSuggestions,
+  getTotalSuggestionsPerUser,
+} from "../utils/utils";
 
 const { Title, Text } = Typography;
 
@@ -25,8 +29,8 @@ const ProjectSummary = ({
     [projectToUserMapping, projectId]
   );
   const project = projects.find((p) => p.id === projectId);
-  const [metrics, setMetrics] = useState({});
   const [metricsByDate, setMetricsByDate] = useState([]);
+  const [usersWithAcceptedCount, setUsersWithAcceptedCount] = useState([]);
   console.log("metricsByDate:", metricsByDate);
 
   useEffect(() => {
@@ -35,7 +39,14 @@ const ProjectSummary = ({
       "ghostText.accepted"
     ).then((data) => {
       console.log("received metrics:", data);
-      setMetrics(data);
+      const countPerUser = getTotalSuggestionsPerUser(data.data);
+      console.log("countPerUser:", countPerUser);
+      setUsersWithAcceptedCount(
+        users.map((user) => ({
+          ...user,
+          acceptedCount: countPerUser[user.githubId],
+        }))
+      );
       setMetricsByDate(countMetricPerDay(data.data));
     });
   }, [users]);
@@ -53,7 +64,7 @@ const ProjectSummary = ({
   const acceptedSuggestions = getTotalAcceptedSuggestions(metricsByDate) || (
     <Spin />
   );
-  const activeUsers = users.length || 0;
+  const activeUsers = users.length || "NA";
 
   return (
     <div style={{ padding: "20px" }}>
@@ -64,7 +75,9 @@ const ProjectSummary = ({
       >
         Back to Dashboard
       </Button>
-      <Title level={2}>Summary for {project.name}</Title>
+      <Title level={2} style={{ textAlign: "center", margin: "50px 0" }}>
+        Copilot Usage Summary for {project.name}
+      </Title>
 
       <Row gutter={16} style={{ marginTop: "20px" }}>
         <Col span={8}>
@@ -116,9 +129,11 @@ const ProjectSummary = ({
       {metricsByDate && (
         <UsageChart data={metricsByDate} style={{ marginTop: "20px" }} />
       )}
-      <Title level={3}>Team Members</Title>
+      <Title level={2} style={{ textAlign: "center", margin: "50px 0" }}>
+        Team Members
+      </Title>
       <UserList
-        users={users}
+        users={usersWithAcceptedCount}
         style={{ marginTop: "20px" }}
         setSelectedUser={setSelectedUser}
       />

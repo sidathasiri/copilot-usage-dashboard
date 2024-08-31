@@ -31,3 +31,11 @@ export const countMetricPerDay = (data) => {
 
 export const getTotalAcceptedSuggestions = (data = []) =>
   data.reduce((sum, current) => sum + current.count, 0);
+
+export const getTotalSuggestionsPerUser = (data) => {
+  const totalCounts = {};
+  for (const user in data) {
+    totalCounts[user] = data[user].reduce((sum, entry) => sum + entry.count, 0);
+  }
+  return totalCounts;
+};

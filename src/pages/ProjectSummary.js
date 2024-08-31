@@ -44,7 +44,7 @@ const ProjectSummary = ({
       setUsersWithAcceptedCount(
         users.map((user) => ({
           ...user,
-          acceptedCount: countPerUser[user.githubId],
+          totalAcceptedCount: countPerUser[user.githubId],
         }))
       );
       setMetricsByDate(countMetricPerDay(data.data));

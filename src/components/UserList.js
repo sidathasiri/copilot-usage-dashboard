@@ -28,7 +28,6 @@ const UserList = ({ users, setSelectedUser }) => {
   ];
 
   const handleRowClick = (record) => {
-    console.log("record:", record);
     setSelectedUser(record);
 
     navigate(`/projects/${projectId}/users/${record.githubId}`);

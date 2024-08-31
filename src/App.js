@@ -12,9 +12,6 @@ function App() {
   const [projectToUserMapping, setProjectToUserMapping] = useState({});
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
-  console.log("selectedProject:", selectedProject);
-  console.log("selectedUser:", selectedUser);
-  console.log("projectToUserMapping:", projectToUserMapping);
 
   useEffect(() => {
     getUsers().then((data) => {

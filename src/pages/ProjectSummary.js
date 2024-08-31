@@ -32,16 +32,13 @@ const ProjectSummary = ({
   const project = projects.find((p) => p.id === projectId);
   const [metricsByDate, setMetricsByDate] = useState([]);
   const [extendedUsers, setExtendedUsers] = useState([]);
-  console.log("metricsByDate:", metricsByDate);
 
   useEffect(() => {
     getUsersMetrics(
       users.map((user) => user.githubId),
       "ghostText.accepted"
     ).then((data) => {
-      console.log("received metrics:", data);
       const countPerUser = getTotalSuggestionsPerUser(data.data);
-      console.log("countPerUser:", countPerUser);
       setExtendedUsers(
         users.map((user) => ({
           ...user,
@@ -92,9 +89,7 @@ const ProjectSummary = ({
               users.map((user) => user.githubId),
               "ghostText.accepted"
             ).then((data) => {
-              console.log("received metrics:", data);
               const countPerUser = getTotalSuggestionsPerUser(data.data);
-              console.log("countPerUser:", countPerUser);
               setExtendedUsers(
                 users.map((user) => ({
                   ...user,

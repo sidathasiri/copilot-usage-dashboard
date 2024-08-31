@@ -11,11 +11,13 @@ export const getUsers = async () => {
 };
 
 export const getUsersMetrics = async (userIds, metricName) => {
-  const { data } = await axios.post(`${BFF_URL}/metrics`, {
-    githubIds: userIds,
-    metricName,
-  });
-
-  console.log("metric data", data);
-  return data;
+  try {
+    const { data } = await axios.post(`${BFF_URL}/metrics`, {
+      githubIds: userIds,
+      metricName,
+    });
+    return data;
+  } catch (e) {
+    console.log("error:", e);
+  }
 };

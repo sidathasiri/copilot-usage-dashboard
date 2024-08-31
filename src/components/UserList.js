@@ -2,7 +2,7 @@ import React from "react";
 import { Table } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 
-const UserList = ({ users }) => {
+const UserList = ({ users, setSelectedUser }) => {
   const navigate = useNavigate();
   const { projectId } = useParams();
 
@@ -11,28 +11,34 @@ const UserList = ({ users }) => {
       title: "GitHub ID",
       dataIndex: "githubId",
       key: "githubId",
+      width: "33%",
     },
     {
-      title: "Accepted Suggestions",
-      dataIndex: "suggestionsAccepted",
-      key: "suggestionsAccepted",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      width: "33%",
     },
     {
-      title: "Last Active Date",
-      dataIndex: "lastActiveDate",
-      key: "lastActiveDate",
+      title: "Machine ID",
+      dataIndex: "machineId",
+      key: "machineId",
+      width: "33%",
     },
   ];
 
   const handleRowClick = (record) => {
-    navigate(`/projects/${projectId}/users/${record.id}`);
+    console.log("record:", record);
+    setSelectedUser(record.githubId);
+
+    navigate(`/projects/${projectId}/users/${record.githubId}`);
   };
 
   return (
     <Table
       columns={columns}
       dataSource={users}
-      rowKey="id"
+      rowKey="githubId"
       onRow={(record) => ({
         onClick: () => handleRowClick(record),
       })}

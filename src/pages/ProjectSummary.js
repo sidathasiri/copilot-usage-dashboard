@@ -11,9 +11,24 @@ import UserList from "../components/UserList";
 
 const { Title, Text } = Typography;
 
-const ProjectSummary = ({ projects, summaryData, usageData, users }) => {
+const summaryData = [
+  { title: "Total Suggestions", value: 1240 },
+  { title: "Accepted Suggestions", value: 850 },
+  { title: "Active Users", value: 25 },
+];
+
+const usageData = [
+  { date: "2024-08-25", count: 120 },
+  { date: "2024-08-26", count: 135 },
+  { date: "2024-08-27", count: 140 },
+  { date: "2024-08-28", count: 150 },
+  { date: "2024-08-29", count: 160 },
+];
+
+const ProjectSummary = ({ projects, projectToUserMapping, setSelectedUser }) => {
   const { projectId } = useParams();
   const navigate = useNavigate();
+  const users = projectToUserMapping[projectId] || [];
 
   const project = projects.find((p) => p.id === projectId);
 
@@ -28,7 +43,7 @@ const ProjectSummary = ({ projects, summaryData, usageData, users }) => {
   // Sample data for cards (replace with actual data from summaryData)
   const totalSuggestions = summaryData.totalSuggestions || 0;
   const acceptedSuggestions = summaryData.acceptedSuggestions || 0;
-  const activeUsers = summaryData.activeUsers || 0;
+  const activeUsers = users.length || 0;
 
   return (
     <div style={{ padding: "20px" }}>
@@ -89,7 +104,8 @@ const ProjectSummary = ({ projects, summaryData, usageData, users }) => {
       </Row>
 
       <UsageChart data={usageData} style={{ marginTop: "20px" }} />
-      <UserList users={users} style={{ marginTop: "20px" }} />
+      <Title level={3}>Team Members</Title>
+      <UserList users={users} style={{ marginTop: "20px" }} setSelectedUser={setSelectedUser} />
     </div>
   );
 };

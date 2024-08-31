@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
-const ProjectDropdown = ({ projects }) => {
+const ProjectDropdown = ({ projects, setSelectedProject }) => {
   const navigate = useNavigate();
 
   const handleChange = (projectId) => {
+    setSelectedProject(projectId);
     navigate(`/projects/${projectId}`);
   };
 

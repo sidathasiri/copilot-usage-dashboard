@@ -7,20 +7,6 @@ import "antd/dist/reset.css"; // Make sure to include this for antd styles
 import { getUsers } from "./services/user-service";
 import { mapUsersToProjects } from "./utils/utils";
 
-const summaryData = [
-  { title: "Total Suggestions", value: 1240 },
-  { title: "Accepted Suggestions", value: 850 },
-  { title: "Active Users", value: 25 },
-];
-
-const usageData = [
-  { date: "2024-08-25", count: 120 },
-  { date: "2024-08-26", count: 135 },
-  { date: "2024-08-27", count: 140 },
-  { date: "2024-08-28", count: 150 },
-  { date: "2024-08-29", count: 160 },
-];
-
 const users = [
   {
     id: "user-1",
@@ -70,9 +56,16 @@ const userUsageData = [
 
 function App() {
   const [projects, setProjects] = useState([]);
+  const [projectToUserMapping, setProjectToUserMapping] = useState({});
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  console.log("selectedProject:", selectedProject);
+  console.log("selectedUser:", selectedUser);
+
   useEffect(() => {
     getUsers().then((data) => {
       const projectToUserMapping = mapUsersToProjects(data.users);
+      setProjectToUserMapping(projectToUserMapping);
       setProjects(
         Object.keys(projectToUserMapping).map((name) => ({ id: name, name }))
       );
@@ -81,15 +74,22 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard projects={projects} />} />
+        <Route
+          path="/"
+          element={
+            <Dashboard
+              projects={projects}
+              setSelectedProject={setSelectedProject}
+            />
+          }
+        />
         <Route
           path="/projects/:projectId"
           element={
             <ProjectSummary
               projects={projects}
-              summaryData={summaryData}
-              usageData={usageData}
-              users={users}
+              projectToUserMapping={projectToUserMapping}
+              setSelectedUser={setSelectedUser}
             />
           }
         />

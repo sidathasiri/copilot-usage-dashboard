@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Card, Typography, Row, Col } from "antd";
 import {
@@ -9,6 +9,7 @@ import {
 import UsageChart from "../components/UsageChart";
 import UserList from "../components/UserList";
 import { getUsersMetrics } from "../services/user-service";
+import { countMetricPerDay } from "../utils/utils";
 
 const { Title, Text } = Typography;
 
@@ -18,14 +19,6 @@ const summaryData = [
   { title: "Active Users", value: 25 },
 ];
 
-const usageData = [
-  { date: "2024-08-25", count: 120 },
-  { date: "2024-08-26", count: 135 },
-  { date: "2024-08-27", count: 140 },
-  { date: "2024-08-28", count: 150 },
-  { date: "2024-08-29", count: 160 },
-];
-
 const ProjectSummary = ({
   projects,
   projectToUserMapping,
@@ -33,8 +26,14 @@ const ProjectSummary = ({
 }) => {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const users = useMemo(() => projectToUserMapping[projectId] || [], [projectToUserMapping, projectId]);
+  const users = useMemo(
+    () => projectToUserMapping[projectId] || [],
+    [projectToUserMapping, projectId]
+  );
   const project = projects.find((p) => p.id === projectId);
+  const [metrics, setMetrics] = useState({});
+  const [metricsByDate, setMetricsByDate] = useState({});
+  console.log("metricsByDate:", metricsByDate);
 
   useEffect(() => {
     getUsersMetrics(
@@ -42,6 +41,8 @@ const ProjectSummary = ({
       "ghostText.accepted"
     ).then((data) => {
       console.log("received metrics:", data);
+      setMetrics(data);
+      setMetricsByDate(countMetricPerDay(data.data));
     });
   }, [users]);
 
@@ -54,7 +55,7 @@ const ProjectSummary = ({
   };
 
   // Sample data for cards (replace with actual data from summaryData)
-  const totalSuggestions = summaryData.totalSuggestions || 0;
+  const totalSuggestions = summaryData.totalSuggestions || 'NA';
   const acceptedSuggestions = summaryData.acceptedSuggestions || 0;
   const activeUsers = users.length || 0;
 
@@ -86,7 +87,7 @@ const ProjectSummary = ({
         </Col>
         <Col span={8}>
           <Card
-            title="Accepted Suggestions"
+            title="Total Accepted Suggestions"
             bordered={false}
             style={{ backgroundColor: "#e6ffed", borderColor: "#b7eb8f" }}
             extra={
@@ -116,7 +117,9 @@ const ProjectSummary = ({
         </Col>
       </Row>
 
-      <UsageChart data={usageData} style={{ marginTop: "20px" }} />
+      {metricsByDate && (
+        <UsageChart data={metricsByDate} style={{ marginTop: "20px" }} />
+      )}
       <Title level={3}>Team Members</Title>
       <UserList
         users={users}

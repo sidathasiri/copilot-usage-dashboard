@@ -16,7 +16,7 @@ const UserDetails = ({ user, usageData }) => {
   const { userId } = useParams();
   const navigate = useNavigate();
 
-  if (!user || user.id !== userId) {
+  if (!user || user.githubId !== userId) {
     return <div>User not found!</div>;
   }
 
@@ -35,11 +35,11 @@ const UserDetails = ({ user, usageData }) => {
       </Button>
       <Card title={`Details for ${user.githubId}`} style={{ marginTop: 20 }}>
         <Title level={4}>GitHub ID: {user.githubId}</Title>
-        <Text>Accepted Suggestions: {user.suggestionsAccepted}</Text>
+        <Text>Accepted Suggestions: {user.totalAcceptedCount}</Text>
       </Card>
       <Card title="User Activity Over Time" style={{ marginTop: 20 }}>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={usageData}>
+          <LineChart data={user.usageOverTime}>
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />

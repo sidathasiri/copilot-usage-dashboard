@@ -30,7 +30,7 @@ const ProjectSummary = ({
   );
   const project = projects.find((p) => p.id === projectId);
   const [metricsByDate, setMetricsByDate] = useState([]);
-  const [usersWithAcceptedCount, setUsersWithAcceptedCount] = useState([]);
+  const [extendedUsers, setExtendedUsers] = useState([]);
   console.log("metricsByDate:", metricsByDate);
 
   useEffect(() => {
@@ -41,10 +41,11 @@ const ProjectSummary = ({
       console.log("received metrics:", data);
       const countPerUser = getTotalSuggestionsPerUser(data.data);
       console.log("countPerUser:", countPerUser);
-      setUsersWithAcceptedCount(
+      setExtendedUsers(
         users.map((user) => ({
           ...user,
           totalAcceptedCount: countPerUser[user.githubId],
+          usageOverTime: data.data[user.githubId],
         }))
       );
       setMetricsByDate(countMetricPerDay(data.data));
@@ -133,7 +134,7 @@ const ProjectSummary = ({
         Team Members
       </Title>
       <UserList
-        users={usersWithAcceptedCount}
+        users={extendedUsers}
         style={{ marginTop: "20px" }}
         setSelectedUser={setSelectedUser}
       />

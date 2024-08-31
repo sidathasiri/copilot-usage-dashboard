@@ -5,6 +5,7 @@ import {
   UserOutlined,
   CheckCircleOutlined,
   BulbOutlined,
+  ReloadOutlined,
 } from "@ant-design/icons";
 import UsageChart from "../components/UsageChart";
 import UserList from "../components/UserList";
@@ -69,13 +70,45 @@ const ProjectSummary = ({
 
   return (
     <div style={{ padding: "20px" }}>
-      <Button
-        type="primary"
-        onClick={handleBack}
-        style={{ marginBottom: "20px" }}
-      >
-        Back to Dashboard
-      </Button>
+      <Row justify="space-between" style={{ marginBottom: "20px" }}>
+        <Button
+          type="primary"
+          onClick={handleBack}
+          style={{ marginBottom: "20px" }}
+        >
+          Back to Dashboard
+        </Button>
+        <Button
+          type="primary"
+          style={{
+            marginBottom: "20px",
+            marginLeft: "20px",
+            backgroundColor: "green",
+          }}
+          icon=<ReloadOutlined />
+          onClick={() => {
+            setMetricsByDate([]);
+            getUsersMetrics(
+              users.map((user) => user.githubId),
+              "ghostText.accepted"
+            ).then((data) => {
+              console.log("received metrics:", data);
+              const countPerUser = getTotalSuggestionsPerUser(data.data);
+              console.log("countPerUser:", countPerUser);
+              setExtendedUsers(
+                users.map((user) => ({
+                  ...user,
+                  totalAcceptedCount: countPerUser[user.githubId],
+                  usageOverTime: data.data[user.githubId],
+                }))
+              );
+              setMetricsByDate(countMetricPerDay(data.data));
+            });
+          }}
+        >
+          Refresh
+        </Button>
+      </Row>
       <Title level={2} style={{ textAlign: "center", margin: "50px 0" }}>
         Copilot Usage Summary for {project.name}
       </Title>

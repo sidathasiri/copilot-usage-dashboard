@@ -1,15 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ProjectSummary from "./pages/ProjectSummary";
 import UserDetails from "./pages/UserDetails";
 import "antd/dist/reset.css"; // Make sure to include this for antd styles
-
-const projects = [
-  { id: "1", name: "Project Alpha" },
-  { id: "2", name: "Project Beta" },
-  { id: "3", name: "Project Gamma" },
-];
+import { getUsers } from "./services/user-service";
+import { mapUsersToProjects } from "./utils/utils";
 
 const summaryData = [
   { title: "Total Suggestions", value: 1240 },
@@ -73,6 +69,15 @@ const userUsageData = [
 ];
 
 function App() {
+  const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    getUsers().then((data) => {
+      const projectToUserMapping = mapUsersToProjects(data.users);
+      setProjects(
+        Object.keys(projectToUserMapping).map((name) => ({ id: name, name }))
+      );
+    });
+  }, []);
   return (
     <Router>
       <Routes>

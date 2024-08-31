@@ -13,7 +13,7 @@ import {
 
 const { Title, Text } = Typography;
 
-const UserDetails = ({ user, usageData }) => {
+const UserDetails = ({ user }) => {
   const { userId } = useParams();
   const navigate = useNavigate();
 

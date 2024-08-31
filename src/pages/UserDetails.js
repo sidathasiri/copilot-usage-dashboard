@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button, Card, Typography } from "antd";
+import { Button, Card, Typography, Row, Col } from "antd";
+import { BulbOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import {
   LineChart,
   Line,
@@ -33,10 +34,43 @@ const UserDetails = ({ user, usageData }) => {
       >
         Back to Project Summary
       </Button>
-      <Card title={`Details for ${user.githubId}`} style={{ marginTop: 20 }}>
-        <Title level={4}>GitHub ID: {user.githubId}</Title>
-        <Text>Accepted Suggestions: {user.totalAcceptedCount}</Text>
-      </Card>
+      <Title level={2} style={{ textAlign: "center", margin: "50px 0" }}>
+        {user.githubId}
+      </Title>
+
+      <Row gutter={16} justify="center" style={{ marginTop: "20px" }}>
+        <Col span={8}>
+          <Card
+            title="Total Suggestions"
+            bordered={false}
+            style={{ backgroundColor: "#e6f7ff", borderColor: "#91d5ff" }}
+            extra={
+              <BulbOutlined style={{ color: "#1890ff", fontSize: "24px" }} />
+            }
+          >
+            <Text strong style={{ fontSize: "24px", color: "#1890ff" }}>
+              NA
+            </Text>
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card
+            title="Total Accepted Suggestions"
+            bordered={false}
+            style={{ backgroundColor: "#e6ffed", borderColor: "#b7eb8f" }}
+            extra={
+              <CheckCircleOutlined
+                style={{ color: "#52c41a", fontSize: "24px" }}
+              />
+            }
+          >
+            <Text strong style={{ fontSize: "24px", color: "#52c41a" }}>
+              {user.totalAcceptedCount}
+            </Text>
+          </Card>
+        </Col>
+      </Row>
+
       <Card title="User Activity Over Time" style={{ marginTop: 20 }}>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={user.usageOverTime}>

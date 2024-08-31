@@ -71,7 +71,7 @@ const UserDetails = ({ user }) => {
         </Col>
       </Row>
 
-      <Card title="User Activity Over Time" style={{ marginTop: 20 }}>
+      <Card title="Total Accepted Suggestions" style={{ marginTop: 20 }}>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={user.usageOverTime}>
             <XAxis dataKey="date" />

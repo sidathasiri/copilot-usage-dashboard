@@ -9,3 +9,13 @@ export const getUsers = async () => {
     console.log("error:", e);
   }
 };
+
+export const getUsersMetrics = async (userIds, metricName) => {
+  const { data } = await axios.post(`${BFF_URL}/metrics`, {
+    githubIds: userIds,
+    metricName,
+  });
+
+  console.log("metric data", data);
+  return data;
+};

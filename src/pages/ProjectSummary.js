@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button, Card, Typography, Row, Col } from "antd";
 import {
@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import UsageChart from "../components/UsageChart";
 import UserList from "../components/UserList";
+import { getUsersMetrics } from "../services/user-service";
 
 const { Title, Text } = Typography;
 
@@ -25,12 +26,24 @@ const usageData = [
   { date: "2024-08-29", count: 160 },
 ];
 
-const ProjectSummary = ({ projects, projectToUserMapping, setSelectedUser }) => {
+const ProjectSummary = ({
+  projects,
+  projectToUserMapping,
+  setSelectedUser,
+}) => {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  const users = projectToUserMapping[projectId] || [];
-
+  const users = useMemo(() => projectToUserMapping[projectId] || [], [projectToUserMapping, projectId]);
   const project = projects.find((p) => p.id === projectId);
+
+  useEffect(() => {
+    getUsersMetrics(
+      users.map((user) => user.githubId),
+      "ghostText.accepted"
+    ).then((data) => {
+      console.log("received metrics:", data);
+    });
+  }, [users]);
 
   if (!project) {
     return <div>Project not found!</div>;
@@ -105,7 +118,11 @@ const ProjectSummary = ({ projects, projectToUserMapping, setSelectedUser }) => 
 
       <UsageChart data={usageData} style={{ marginTop: "20px" }} />
       <Title level={3}>Team Members</Title>
-      <UserList users={users} style={{ marginTop: "20px" }} setSelectedUser={setSelectedUser} />
+      <UserList
+        users={users}
+        style={{ marginTop: "20px" }}
+        setSelectedUser={setSelectedUser}
+      />
     </div>
   );
 };

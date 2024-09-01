@@ -4,7 +4,7 @@ import ProjectDropdown from "../components/ProjectDropdown";
 
 const { Title } = Typography;
 
-const Dashboard = ({ projects, setSelectedProject }) => {
+const Dashboard = ({ projects }) => {
   return (
     <div
       style={{
@@ -30,10 +30,7 @@ const Dashboard = ({ projects, setSelectedProject }) => {
               alignItems: "flex-start",
             }}
           >
-            <ProjectDropdown
-              projects={projects}
-              setSelectedProject={setSelectedProject}
-            />
+            <ProjectDropdown projects={projects} />
           </div>
         </Col>
       </Row>

@@ -10,7 +10,6 @@ import { mapUsersToProjects } from "./utils/utils";
 function App() {
   const [projects, setProjects] = useState([]);
   const [projectToUserMapping, setProjectToUserMapping] = useState({});
-  const [selectedProject, setSelectedProject] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
@@ -25,15 +24,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Dashboard
-              projects={projects}
-              setSelectedProject={setSelectedProject}
-            />
-          }
-        />
+        <Route path="/" element={<Dashboard projects={projects} />} />
         <Route
           path="/projects/:projectId"
           element={
